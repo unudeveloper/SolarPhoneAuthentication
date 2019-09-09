@@ -1,23 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <%= csrf_meta_tag %>
-</head>
-<body>
-  <div id="header">
-    <% if signed_in? -%>
-      <%= button_to t(".sign_out"), sign_out_path, method: :delete %>
-    <% else -%>
-      <%= link_to t(".sign_in"), sign_in_path %>
-    <% end -%>
-  </div>
+doctype html
+html.backend class=(yield(:html_class))
+  head
+    meta charset="utf-8" /
+    meta content="IE=edge" http-equiv="X-UA-Compatible" /
+    meta rel="manifest" href="/manifest.json"
 
-  <div id="flash">
-    <% flash.each do |key, value| -%>
-      <div id="flash_<%= key %>"><%=h value %></div>
-    <% end %>
-  </div>
+    title Lodgistics
+    meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" /
+    meta content="Lodgistics offers a cloud based web and mobile app solution to help manage hotels. Lodgistics offers a cloud based web and mobile app solution to help manage hotels. Lodgistics will help you streamline operations, drive actionable insights, and reduce costs at your hotel.  The tools will make every department more efficient and will drastically improve the speed and accuracy of communication between staff and management, ultimately improving the guest experience!" name="description"
+    meta content=(Property.current&.token) name="property-token"
+    = favicon_link_tag 'adminre_theme_v120/image/favicon.ico'
+    = stylesheet_link_tag 'application'
+    = javascript_tag do
+      = raw "window.vapidPublicKey = new Uint8Array(#{vapid_public_key});\n"
+    = javascript_include_tag 'adminre_theme_v120/library/modernizr/js/modernizr.min'
+    = csrf_meta_tags
+    = Gon::Base.render_data
 
-  <%= yield %>
-</body>
-</html>
+  body class=(yield(:body_class)) data-user-id=current_user.try(:pusher_id)
+    .alert-messages data-messages=(flash.to_hash.except(:sticky_messages).to_a.to_json) data-messages-sticky=(flash[:sticky_messages].to_a.to_json)
+
+    = render 'layouts/header'
+    = render 'layouts/sidebar_left'
+    section#main.main-section role="main"
+      .container-fluid= yield
+      = render 'layouts/quick_action'
+    = render 'layouts/sidebar_right'
+
+    = javascript_include_tag 'application'
+    = javascript_include_tag 'integration' if Rails.env.test?
+    = yield :js
+    = render 'layouts/freshdesk'
+    = render 'layouts/google_analytics'
+    -# = render 'layouts/pendo'
+    = render 'layouts/airbrake'
+    = render 'layouts/wootric'
+    = render 'layouts/appcues'
