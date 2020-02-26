@@ -8,7 +8,7 @@ gem 'appraisal'
 gem 'capybara', '>= 2.6.2'
 gem 'database_cleaner', '~> 1.0'
 gem 'factory_bot_rails', '~> 5.0'
-gem 'nokogiri', '~> 1.10.0'
+gem 'nokogiri', '~> 1.10.8'
 gem 'pry', require: false
 gem 'rspec-rails', '~> 3.5'
 gem 'shoulda-matchers', '~> 4.0'
