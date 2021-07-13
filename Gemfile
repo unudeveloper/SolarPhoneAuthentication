@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'addressable', '~> 2.6.0'
+gem 'addressable', '~> 2.8.0'
 gem 'ammeter'
 gem 'appraisal'
 gem 'capybara', '>= 2.6.2'
